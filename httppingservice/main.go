@@ -1,23 +1,26 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/samuel/go-zookeeper/zk"
-	"minids/zkcommon"
+	"minids/common"
 	"net/http"
-	"time"
 )
-
-var serverIp string
-var listenPort = ":80"
 
 func init() {
 
 }
 
+var serverIp string
+var listenPort = ":80"
+var serverIPAndPort string
+
+func init() {
+	serverIp, _ = common.LocalIp()
+	serverIPAndPort = serverIp + listenPort
+}
+
 func main() {
-	zkConn := zookeeperRegister()
+	zkConn := common.RegisterServiceName("httpping", serverIp+listenPort)
 	defer zkConn.Close()
 
 	// do something
@@ -27,20 +30,4 @@ func main() {
 		context.String(http.StatusOK, serverIp+listenPort+":say hello")
 	})
 	router.Run(listenPort)
-}
-
-func zookeeperRegister() *zk.Conn {
-	conn, zkconnError := zkcommon.GetConnect([]string{"zookeeper"}, time.Second)
-	if zkconnError != nil {
-		panic("zookeeper connect failed")
-	}
-
-	serverIp, _ = zkcommon.LocalIp()
-	fmt.Println(serverIp)
-	registerErr := zkcommon.RegistServer(conn, "httpping", serverIp+listenPort)
-	if registerErr != nil {
-		panic("zookeeper register server failed")
-	}
-
-	return conn
 }
