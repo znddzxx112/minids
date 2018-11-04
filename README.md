@@ -20,7 +20,6 @@ it's a http service named "ping"
 # cd $GOPATH/src
 # git clone http://www.github.com/znddzxx112/minids
 # go get github.com/gin-gonic/gin
-# #go get -x github.com/leesper/tao
 ```
 
 ### run zookeeper
