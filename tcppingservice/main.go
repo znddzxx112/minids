@@ -17,6 +17,8 @@ func init() {
 }
 
 func main() {
+	go tcpMsgFunc()
+
 	zkConn := common.RegisterServiceName("tcpping", serverIPAndPort)
 	defer zkConn.Close()
 
@@ -38,14 +40,48 @@ func main() {
 func tcpHandleFunc(conn net.Conn) {
 	defer conn.Close()
 
-	line := common.GetStringFromTcpConn(conn)
+	line := common.DecodeMsgEnd(conn)
 	fmt.Println(line)
 
-	var buffer bytes.Buffer
-	buffer.Write([]byte(serverIPAndPort))
-	buffer.Write([]byte(" recevie:"))
-	buffer.Write(line)
-	buffer.Write([]byte("\n"))
+	var bodyBuffer bytes.Buffer
+	bodyBuffer.Write([]byte(serverIPAndPort))
+	bodyBuffer.Write([]byte(" recevie:"))
+	bodyBuffer.Write(line)
 
-	conn.Write(buffer.Bytes())
+	conn.Write(common.EncodeMsgEnd(bodyBuffer.Bytes()))
+}
+
+func tcpMsgFunc() {
+	tcpMsgListenPort := ":8082"
+	tcpMsgServerIPAndPort := serverIp + tcpMsgListenPort
+	zkConn := common.RegisterServiceName("tcpmsgping", tcpMsgServerIPAndPort)
+	defer zkConn.Close()
+
+	ln, lnErr := net.Listen("tcp", tcpMsgListenPort)
+	if lnErr != nil {
+		panic("listen failed")
+	}
+	defer ln.Close()
+
+	for {
+		conn, connErr := ln.Accept()
+		if connErr != nil {
+			continue
+		}
+		go tcpMsgHandleFunc(conn, tcpMsgListenPort)
+	}
+}
+
+func tcpMsgHandleFunc(conn net.Conn, tcpMsgListenPort string) {
+	defer conn.Close()
+
+	line := common.DecodeFrame(conn)
+	fmt.Println(line)
+
+	var bodyBuffer bytes.Buffer
+	bodyBuffer.Write([]byte(tcpMsgListenPort))
+	bodyBuffer.Write([]byte("recevie:"))
+	bodyBuffer.Write(line)
+
+	conn.Write(common.EncodeFrame(bodyBuffer.Bytes()))
 }
