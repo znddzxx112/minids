@@ -1,10 +1,10 @@
-package main
+package gateway
 
 import (
 	"bufio"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"minids/common"
+	"minids/core/common"
 	"net"
 	"net/http"
 )

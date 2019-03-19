@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"minids/common"
+	"minids/core/common"
 	"net"
 )
 

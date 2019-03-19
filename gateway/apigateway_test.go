@@ -1,11 +1,11 @@
-package tests
+package gateway
 
 import (
 	"context"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"log"
-	"minids/common"
+	"minids/core/common"
 	"minids/services/tpingservice/gen-go/tpingservice"
 	"testing"
 	"time"
