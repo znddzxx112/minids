@@ -1,7 +1,7 @@
 # minids
 
 it's a mini distributed system.
-it includes three parts which is apigateway,zookeeper,services
+it includes three parts which is apigateway,zookeeper,services.
 
 ## apigateway
 
