@@ -15,7 +15,7 @@ import (
 	"syscall"
 )
 
-func Tcpclient() {
+func Process() {
 	ip := "127.0.0.1"
 	port := "9736"
 	addr := ip + ":" + port
@@ -49,7 +49,7 @@ func Tcpclient() {
 			return
 		}
 
-		resBytes, tcpcliProcess := Process(conn, &iBytes)
+		resBytes, tcpcliProcess := Tcpclient(conn, &iBytes)
 		if tcpcliProcess != nil {
 			fmt.Println(tcpcliProcess.Error())
 		}
@@ -57,7 +57,7 @@ func Tcpclient() {
 	}
 }
 
-func Process(conn io.ReadWriter, iBytes *[]byte) (*[]byte, error) {
+func Tcpclient(conn io.ReadWriter, iBytes *[]byte) (*[]byte, error) {
 
 	iBytesSlice := bytes.Split(*iBytes, []byte(" "))
 	reqCmd := &protos.Cmd{}
