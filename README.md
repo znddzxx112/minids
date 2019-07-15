@@ -17,11 +17,11 @@ docker run -d --net=host --name minids_con minids:latest
 ### dev or debug:
 - run server:
 ```
-docker run -it --net=host --name minids_debug --rm -v ~/gopath:/gopath -v ~/workspace/znddzxx112/minids:/workspace centos7_golang:1.12.1 /go/bin/go run /workspace/minids.go
+docker run -it --net=host --name minids_debug --rm -v ~/gopath:/gopath -v ~/workspace/znddzxx112/minids:/workspace centos7_golang:1.12.1 /go/bin/go run /workspace/minidsd.go
 ```
 
 - build tcp client:
 ```
-docker run -it --net=host --name minids_debug --rm -v ~/gopath:/gopath -v ~/workspace/znddzxx112/minids:/workspace centos7_golang:1.12.1 /go/bin/go build /workspace/tcpcli.go
+docker run -it --net=host --name minids_debug --rm -v ~/gopath:/gopath -v ~/workspace/znddzxx112/minids:/workspace centos7_golang:1.12.1 /go/bin/go build /workspace/minids.go
 ```
 
