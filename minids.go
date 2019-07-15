@@ -1,14 +1,7 @@
 package main
 
-import (
-	"github.com/znddzxx112/minids/api"
-)
+import "github.com/znddzxx112/minids/client"
 
-// this is minids's server
-// todo:
-// 1. config file
-// 2. cmd config
-
-func main() {
-	api.Process()
+func main()  {
+	client.Process()
 }
