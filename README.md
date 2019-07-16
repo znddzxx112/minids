@@ -1,7 +1,7 @@
 # minids
 
 it's a mini distributed system.
-it provides tcp client, http client
+it provides tcp client, http client.
 
 ### release
 - go mod And gen main cmd:

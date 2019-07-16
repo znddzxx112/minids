@@ -1,6 +1,6 @@
 /**
 tcp proto
- */
+*/
 package core
 
 import (
@@ -8,11 +8,13 @@ import (
 	"encoding/binary"
 	"errors"
 	"io"
+	"strconv"
 )
 
-var headerLenthErr error = errors.New("headbuf length less 4")
-
 const headerLength = 4
+
+var headerLenthErr error = errors.New("headbuf length less " + strconv.Itoa(headerLength))
+var bodyLenthErr error = errors.New("body read bytes not enough")
 
 type TransCoder struct {
 	rw io.ReadWriter
@@ -25,36 +27,49 @@ func NewTransCoder(rw io.ReadWriter) *TransCoder {
 }
 
 func (t *TransCoder) Send(body *[]byte) error {
-	header, berr := int32Tobytes(int32(len(*body)))
-	if berr != nil {
-		return berr
+	header, int32TobytesErr := int32Tobytes(int32(len(*body)))
+	if int32TobytesErr != nil {
+		return int32TobytesErr
 	}
-	t.rw.Write(header)
-	t.rw.Write(*body)
+
+	if _, writeErr := t.rw.Write(bytesCombine(header, *body)); writeErr != nil {
+		return writeErr
+	}
+
 	return nil
 }
 
-func (t *TransCoder) Receive() ([]byte, error) {
+func (t *TransCoder) Receive() (*[]byte, error) {
 	headbuf := make([]byte, headerLength)
-	rlen, err := io.ReadFull(t.rw, headbuf)
-	if err != nil {
-		return nil, err
+	readHeadN, ReadFullErr := io.ReadFull(t.rw, headbuf)
+	if ReadFullErr != nil {
+		return nil, ReadFullErr
 	}
-	if rlen < headerLength {
+
+	if readHeadN < headerLength {
 		return nil, headerLenthErr
 	}
 
-	bodyLen, cbytesToint32err := bytesToint32(headbuf)
-	if cbytesToint32err != nil {
-		return nil, cbytesToint32err
+	bodyLen, bytesToint32Err := bytesToint32(headbuf)
+	if bytesToint32Err != nil {
+		return nil, bytesToint32Err
 	}
 
 	body := make([]byte, bodyLen)
-	_, readFullerr := io.ReadFull(t.rw, body)
+	readBodyN, readFullerr := io.ReadFull(t.rw, body)
 	if readFullerr != nil {
 		return nil, readFullerr
 	}
-	return body, nil
+
+	if int32(readBodyN) < bodyLen {
+		return nil, bodyLenthErr
+	}
+
+	return &body, nil
+}
+
+func bytesCombine(pBytes ...[]byte) []byte {
+	return bytes.Join(pBytes, []byte(""))
 }
 
 func int32Tobytes(len int32) ([]byte, error) {

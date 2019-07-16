@@ -39,14 +39,15 @@ func Process() error {
 func tcpserver(conn net.Conn) {
 	transCoder := core.NewTransCoder(conn)
 	defer conn.Close()
+
 	for {
-		bs, receiveErr := transCoder.Receive()
-		if receiveErr != nil {
+		bs, ReceiveErr := transCoder.Receive()
+		if ReceiveErr != nil {
 			break
 		}
 
 		cmdpb := &protos.Cmd{}
-		unmarshalErr := proto.Unmarshal(bs, cmdpb)
+		unmarshalErr := proto.Unmarshal(*bs, cmdpb)
 		if unmarshalErr != nil {
 			break
 		}
@@ -59,13 +60,14 @@ func tcpserver(conn net.Conn) {
 		responseCmdPb := &protos.Cmd{}
 		responseCmdPb.Name = command.Name
 		responseCmdPb.ResInfo = *command.ResInfo
+
 		respbf, marshalErr := proto.Marshal(responseCmdPb)
 		if marshalErr != nil {
 			break
 		}
 
-		sendErr := transCoder.Send(&respbf)
-		if sendErr != nil {
+		SendErr := transCoder.Send(&respbf)
+		if SendErr != nil {
 			break
 		}
 	}
