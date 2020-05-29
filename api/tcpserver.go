@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/golang/protobuf/proto"
-	"github.com/znddzxx112/minids/core"
-	"github.com/znddzxx112/minids/protos"
 	"github.com/znddzxx112/minids/services"
+	"github.com/znddzxx112/minids/services/core"
+	"github.com/znddzxx112/minids/services/protos"
 	"net"
 )
 

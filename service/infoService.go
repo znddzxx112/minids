@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/znddzxx112/minids/core"
+	"github.com/znddzxx112/minids/services/core"
 )
 
 // server help guide

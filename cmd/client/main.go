@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/znddzxx112/minids/client"
-	"github.com/znddzxx112/minids/core"
+	"github.com/znddzxx112/minids/services/core"
 	"os"
 	"os/signal"
 	"syscall"
@@ -17,4 +17,3 @@ func main()  {
 
 
 }
-
