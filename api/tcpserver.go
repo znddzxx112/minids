@@ -2,18 +2,18 @@ package api
 
 import (
 	"github.com/golang/protobuf/proto"
-	"github.com/znddzxx112/minids/services"
-	"github.com/znddzxx112/minids/services/core"
-	"github.com/znddzxx112/minids/services/protos"
+	"github.com/znddzxx112/minids/common"
+	"github.com/znddzxx112/minids/protos"
+	"github.com/znddzxx112/minids/service"
 	"net"
 )
 
-var serviceRegistry *core.ServiceRegistry
+var serviceRegistry *common.ServiceRegistry
 
 func init() {
-	serviceRegistry = core.NewServiceRegistry()
+	serviceRegistry = common.NewServiceRegistry()
 
-	helloCmd := core.NewCommand("hello", services.HelloService)
+	helloCmd := common.NewCommand("hello", service.HelloService)
 	serviceRegistry.Registry(helloCmd)
 }
 

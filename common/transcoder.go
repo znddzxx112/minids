@@ -1,7 +1,7 @@
 /**
 tcp proto
 */
-package core
+package common
 
 import (
 	"bytes"

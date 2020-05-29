@@ -1,11 +1,11 @@
-package services
+package service
 
 import (
-	"github.com/znddzxx112/minids/services/core"
+	"github.com/znddzxx112/minids/common"
 )
 
 // server help guide
-func InfoService(cmd *core.Command) error  {
+func InfoService(cmd *common.Command) error  {
 	//resbuf := bytes.Buffer{}
 	
 
